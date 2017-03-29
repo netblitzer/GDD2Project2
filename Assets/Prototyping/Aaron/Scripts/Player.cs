@@ -55,24 +55,26 @@ public class Player : MonoBehaviour {
 			speed += .1f;
 		}
 
-		if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+
+		if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
 		{
-			velocity = new Vector3(-1, 0, 0);
+			velocity += new Vector3(-1, 0, 0);
 		}
-		else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+		else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
 		{
-			velocity = new Vector3(1, 0, 0);
+			velocity += new Vector3(1, 0, 0);
 		}
-		else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+		if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
 		{
 
-			velocity = new Vector3(0, 0, 1);
+			velocity += new Vector3(0, 0, 1);
 		}
-		else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+		else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
 		{
 
-			velocity = new Vector3(0, 0, -1);
+			velocity += new Vector3(0, 0, -1);
 		}
+
 		// friction
 		else if (!Input.anyKey)
 		{
@@ -95,11 +97,11 @@ public class Player : MonoBehaviour {
 				}
 			}
 		} 
-
+		Debug.Log (velocity);
 		// clamp speed
 		speed = Mathf.Clamp(speed, 0, maxSpeed);
-		charControl.Move(velocity * speed * Time.deltaTime);
-
+		charControl.Move(velocity.normalized * speed * Time.deltaTime);
+		velocity = Vector3.zero;
 
 		// shoot logic
 		if (shootFreezeTime > 0f) 
