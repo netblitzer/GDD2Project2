@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour {
 
     public GameObject myCamera;
 
-    private bool shifting;
+    public bool shifting;
 
 	// Use this for initialization
 	void Start () {

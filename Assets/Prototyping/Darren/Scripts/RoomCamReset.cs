@@ -6,6 +6,7 @@ public class RoomCamReset : MonoBehaviour
 {
 
     public GameObject gameManager;
+    public GameObject cameraTarget = null;
 
     // Use this for initialization
     void Start()
@@ -13,8 +14,23 @@ public class RoomCamReset : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GMan");
     }
 
-    void OnTriggerEnter(Collider col)
+    void OnTriggerStay(Collider col)
     {
-        gameManager.GetComponent<GameManager>().RoomChanged();
+        if (col.tag == "Player")
+        {
+            gameManager.GetComponent<GameManager>().RoomChanged();
+
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (cameraTarget != null)
+        {
+            if (other.tag == "Player")
+            {
+                gameManager.GetComponent<GameManager>().ChangeRoom(cameraTarget.transform.position);
+            }
+        }
     }
 }
