@@ -11,6 +11,7 @@ public class Player : MonoBehaviour {
 	private float speed;
 	private Vector3 prevMousePosition;
 	private float shootFreezeTime;
+	private float health;
 
 	//property for velocity
 	public Vector3 Velocity
@@ -30,6 +31,7 @@ public class Player : MonoBehaviour {
 		velocity = Vector3.zero;
 		prevMousePosition = Input.mousePosition;
 		charControl = gameObject.GetComponent<CharacterController>();
+		health = 100f;
 	}
 
 	// Update is called once per frame
@@ -97,7 +99,6 @@ public class Player : MonoBehaviour {
 				}
 			}
 		} 
-		Debug.Log (velocity);
 		// clamp speed
 		speed = Mathf.Clamp(speed, 0, maxSpeed);
 		charControl.Move(velocity.normalized * speed * Time.deltaTime);

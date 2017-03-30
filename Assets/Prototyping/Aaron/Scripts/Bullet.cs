@@ -21,4 +21,8 @@ public class Bullet : MonoBehaviour {
 	public void Fire(Vector3 direction) {
 		velocity = new Vector3(direction.x, 0, direction.z).normalized;	
 	}
+
+	void OnTriggerEnter() {
+		Destroy (gameObject);
+	}
 }
