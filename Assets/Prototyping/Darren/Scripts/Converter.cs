@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Converter : MonoBehaviour {
 
-    private int health;
+    public int health = 1000;
     private bool active;
     private string type;
 
@@ -26,7 +26,7 @@ public class Converter : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        health = 1000;
+        //health = 1000;
         active = true;
         type = this.gameObject.tag;     // Question voodoo. . .?
     }
@@ -71,7 +71,7 @@ public class Converter : MonoBehaviour {
         {
             health = 1000;
         }
-        Debug.Log(health);
     }
+    
     
 }
