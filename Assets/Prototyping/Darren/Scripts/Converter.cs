@@ -26,7 +26,7 @@ public class Converter : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        health = 100;
+        health = 1000;
         active = true;
         type = this.gameObject.tag;     // Question voodoo. . .?
     }
@@ -67,10 +67,11 @@ public class Converter : MonoBehaviour {
         }
 
         health += regen;
-        if (health > 100)
+        if (health > 1000)
         {
-            health = 100;
+            health = 1000;
         }
+        Debug.Log(health);
     }
     
 }

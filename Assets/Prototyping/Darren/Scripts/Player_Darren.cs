@@ -96,8 +96,10 @@ public class Player_Darren : MonoBehaviour {
 					speed = 0f;
 				}
 			}
-		} 
-		Debug.Log (velocity);
+		}
+
+        //Debug.Log (velocity);
+
 		// clamp speed
 		speed = Mathf.Clamp(speed, 0, maxSpeed);
 		charControl.Move(velocity.normalized * speed * Time.deltaTime);
