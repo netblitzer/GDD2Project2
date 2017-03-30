@@ -97,7 +97,6 @@ public class Player : MonoBehaviour {
 				}
 			}
 		} 
-		Debug.Log (velocity);
 		// clamp speed
 		speed = Mathf.Clamp(speed, 0, maxSpeed);
 		charControl.Move(velocity.normalized * speed * Time.deltaTime);
