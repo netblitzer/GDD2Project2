@@ -60,6 +60,7 @@ public class Room : MonoBehaviour {
             {
                 if (obj.tag == "Player")
                 {
+                    //Debug.Log(enemiesInRoom.Count);
                     Ply = obj;
 
                     if (playerStayTime < 300) {
@@ -84,17 +85,19 @@ public class Room : MonoBehaviour {
 
         }//end if
 
-        Debug.Log(enemiesInRoom.Count);
+        //Debug.Log(enemiesInRoom.Count);
 
+        //If a room has enemies in it, damage the convertor in the room.
         if (containsEnemy && fixedObject != null)
         {
             fixedObject.GetComponent<Converter>().onHit(1);
         }
         
+        //Tell spawnpoint that the player is in the room.
         if (spawn != null && Ply != null) {
             spawn.containsPlayer = true;
 
-            Debug.Log(enemiesInRoom);
+            //Debug.Log(enemiesInRoom);
 
             foreach (Enemy e in enemiesInRoom) {
                 e.target = Ply;
@@ -111,15 +114,14 @@ public class Room : MonoBehaviour {
 
     private void OnTriggerStay(Collider other)
     {
-        roomContents.Clear();
-
         if (fixedObject != null) { roomContents.Add(fixedObject); }
 
         if (other.tag == "Enemy")
         {
             roomContents.Add(other.gameObject);
         }
-        else if (other.tag == "Player")
+
+        if (other.tag == "Player")
         {
             roomContents.Add(other.gameObject);
 
@@ -127,5 +129,6 @@ public class Room : MonoBehaviour {
                 spawn.containsPlayer = true;
             }
         }
-    }
+    }//end On Trigger Stay
+
 }//end of Room

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player_Darren : MonoBehaviour {
 
+    public float health;
 	public float maxSpeed;
 	public GameObject bulletPrefab;
 
@@ -29,6 +30,7 @@ public class Player_Darren : MonoBehaviour {
 	// Use this for initialization
 	void Start()
 	{
+        health = 100.0f;
 		speed = 0f;
 		shootFreezeTime = 0f;
 		velocity = Vector3.zero;
@@ -42,6 +44,11 @@ public class Player_Darren : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
 	{
+        if (gameObject.transform.position.y > 0.5f)
+        {
+            Debug.Log(gameObject.transform.position.y);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, 0, gameObject.transform.position.z);
+        }
 		// rotate the player using mouse
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit mouseToGround;
@@ -142,6 +149,16 @@ public class Player_Darren : MonoBehaviour {
 			shootFreezeTime = 0.1f;
 		}
 	}
+
+    //Take damage from enemy
+    public void TakeDamage(float dmg)
+    {
+        if(dmg > 0.0f && dmg < 10.0f)
+        {
+            health -= dmg;
+        }
+    }
+
 
 	// create a bullet yo!
 	private void Shoot() 

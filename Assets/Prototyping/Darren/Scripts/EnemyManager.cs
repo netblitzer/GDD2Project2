@@ -31,8 +31,12 @@ public class EnemyManager : MonoBehaviour {
 
     private Vector2 roomSize = new Vector2(14.25f, 10f);
 
+    private int enemyCount;
+
     // Use this for initialization
     void Start () {
+        enemyCount = 0;
+
         //spawns = new List<SpawnPoint>();
         enemies = new List<Enemy>();
         spawns = new Dictionary<Vector2, SpawnPoint>();
@@ -45,7 +49,7 @@ public class EnemyManager : MonoBehaviour {
 
         // initialize enemies
         Physics.IgnoreLayerCollision(8, 8, true);
-        Physics.IgnoreLayerCollision(8, 9, true);
+        //Physics.IgnoreLayerCollision(8, 9, true);
 
         keys = spawns.Keys.ToList<Vector2>();
 
@@ -61,6 +65,8 @@ public class EnemyManager : MonoBehaviour {
             Enemy eScript = newEnemy.GetComponent<Enemy>();
             Vector3 spawnLoc = (spawns[keys[room]].gameObject.transform.position - new Vector3(Random.Range(-7f, 7f), 10.5f, Random.Range(-4f, 4f)));
             eScript.init(maxHealth, maxSpeed, maxForce, maxDamage, (EnemyTypes)((int)Random.Range(0, 3)), spawnLoc, null);
+            enemyCount++;
+            eScript.name = "Enemy Number " + enemyCount.ToString();
 
             enemies.Add(eScript);
         }

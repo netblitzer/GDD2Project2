@@ -67,7 +67,7 @@ public class Enemy : MonoBehaviour {
         directionXY = Vector3.forward;
         positionXY = Vector3.zero;
 
-        Debug.Log(_type);
+        //Debug.Log(_type);
         type = _type;
 
         switch (_type) {
@@ -134,7 +134,7 @@ public class Enemy : MonoBehaviour {
         
         if (target != null) {
             agent.SetDestination(target.transform.position);
-            Debug.Log("Seeking player");
+            //Debug.Log("Seeking player");
         } else {
             calcNavMeshWander();
         }
@@ -194,12 +194,24 @@ public class Enemy : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.tag == "Bullet") {
+            Debug.Log("Bullet Hit Enemy");
             damageEnemy(1.0f);
         }
+        if (collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.GetComponent<Player_Darren>().TakeDamage(damage);
+            gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        }
+
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
     }
 
     // function to set the target of each enemy
-        // even if the target is null, this will be fine since then the enemy will just wnader
+    // even if the target is null, this will be fine since then the enemy will just wnader
     void setTarget(GameObject _target) {
         target = _target;
     }

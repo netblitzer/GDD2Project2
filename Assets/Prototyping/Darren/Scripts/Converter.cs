@@ -28,7 +28,8 @@ public class Converter : MonoBehaviour {
     {
         //health = 1000;
         active = true;
-        type = this.gameObject.tag;     // Question voodoo. . .?
+        type = gameObject.tag;     // Question voodoo. . .?
+                                   // Answer More voodoo. this not needed. gameObject is this. O.o
     }
 
     // Update is called once per frame
