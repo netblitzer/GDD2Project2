@@ -20,6 +20,13 @@ public class Player : MonoBehaviour {
 		set { velocity = value; }
 	}
 
+	public float Health {
+		get { return health; }
+		set {
+			health = value >= 0 && value <= 100 ? value : value < 0 ? 0 : 100;
+		}
+	}
+
 	//internal reference to the CharacterController component
 	protected CharacterController charControl;
 
@@ -52,29 +59,27 @@ public class Player : MonoBehaviour {
 		prevMousePosition = Input.mousePosition;
 
 		// move
-		//Get arrow key input
-		if (Input.anyKey) {
-			speed += .1f;
-		}
-
-
 		if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
 		{
 			velocity += new Vector3(-1, 0, 0);
+			speed += .1f;
 		}
 		else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
 		{
 			velocity += new Vector3(1, 0, 0);
+			speed += .1f;
 		}
 		if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
 		{
 
 			velocity += new Vector3(0, 0, 1);
+			speed += .1f;
 		}
 		else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
 		{
 
 			velocity += new Vector3(0, 0, -1);
+			speed += .1f;
 		}
 
 		// friction
@@ -126,5 +131,14 @@ public class Player : MonoBehaviour {
 		bullet.transform.position = transform.position + transform.forward;
 		Bullet bulletBehavior = bullet.GetComponent<Bullet> ();
 		bulletBehavior.Fire (transform.forward);
+	}
+
+	void OnCollisionEnter(Collision collision) {
+		if (collision.gameObject.tag == "Enemy") {
+			health -= 10;
+			if (health < 0) {
+				health = 0;
+			}
+		}
 	}
 }//end of player
