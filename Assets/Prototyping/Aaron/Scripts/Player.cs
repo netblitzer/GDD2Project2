@@ -23,7 +23,7 @@ public class Player : MonoBehaviour {
 	public float Health {
 		get { return health; }
 		set {
-			health = value >= 0 && value <= 100 ? value : value < 0 ? 0 : 100;
+			health = validateHealth (value);
 		}
 	}
 
@@ -122,6 +122,15 @@ public class Player : MonoBehaviour {
 			Shoot ();
 			shootFreezeTime = 0.5f;
 		}
+
+		// lastly regen health over time
+		health = validateHealth(health += Time.deltaTime);
+		Debug.Log (health);
+	}
+
+	// validate health value, keep between 0 and 100 (like, duh)
+	private float validateHealth(float value) {
+		return value >= 0 && value <= 100 ? value : value < 0 ? 0 : 100;
 	}
 
 	// create a bullet yo!
@@ -135,10 +144,7 @@ public class Player : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision) {
 		if (collision.gameObject.tag == "Enemy") {
-			health -= 10;
-			if (health < 0) {
-				health = 0;
-			}
+			health = validateHealth (health - 10f);
 		}
 	}
 }//end of player
