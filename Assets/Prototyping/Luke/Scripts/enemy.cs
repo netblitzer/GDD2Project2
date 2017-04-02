@@ -32,7 +32,7 @@ public class enemy : MonoBehaviour {
     // physics variables
     private Vector3 forces;
 	private Vector3 acceleration;
-	private Vector3 velocity;
+	public Vector3 velocity;
 	private Vector3 position;
 
 	// physics status variables

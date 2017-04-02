@@ -10,7 +10,11 @@ public class Player_Darren : MonoBehaviour {
 	private Vector3 velocity;
 	private float speed;
 	private Vector3 prevMousePosition;
-	private float shootFreezeTime;
+	private Vector3 currMousePosition;
+    private float shootFreezeTime;
+
+    private float lerpTimer;
+    private DebugLines lines;
 
 	//property for velocity
 	public Vector3 Velocity
@@ -29,7 +33,10 @@ public class Player_Darren : MonoBehaviour {
 		shootFreezeTime = 0f;
 		velocity = Vector3.zero;
 		prevMousePosition = Input.mousePosition;
-		charControl = gameObject.GetComponent<CharacterController>();
+        currMousePosition = Input.mousePosition;
+        charControl = gameObject.GetComponent<CharacterController>();
+        lerpTimer = 0.05f;
+        lines = FindObjectOfType<DebugLines>();
 	}
 
 	// Update is called once per frame
@@ -41,13 +48,29 @@ public class Player_Darren : MonoBehaviour {
 		if (Physics.Raycast(ray, out mouseToGround)) { 
 			Vector3 mousePoint2D = new Vector3 (mouseToGround.point.x, 0, mouseToGround.point.z);
 			Vector3 player2D = new Vector3 (transform.position.x, 0, transform.position.z);
-			Vector3 playerToPoint = mousePoint2D - player2D;
+            Vector3 playerToPoint = mousePoint2D - player2D;
 
-			if (prevMousePosition != Input.mousePosition){ // prevent jittery movement
-				transform.forward = Vector3.Lerp (transform.forward, playerToPoint, .05f);
-			}
-		}
-		prevMousePosition = Input.mousePosition;
+            transform.forward = playerToPoint.normalized;
+
+            lines.addLine(mouseToGround.point, mouseToGround.point + mouseToGround.normal * 2, 4);
+            lines.addLine(gameObject.transform.position, gameObject.transform.position + playerToPoint * 2, 5);
+            lines.addLine(gameObject.transform.position, gameObject.transform.position + gameObject.transform.forward * 2, 2);
+            lines.addLine(gameObject.transform.position, gameObject.transform.position + gameObject.transform.right * 2, 3);
+
+            //Debug.Log(gameObject.transform.position);
+            //if (currMousePosition != Input.mousePosition){ // prevent jittery movement
+            //    lerpTimer = 0.05f;
+            //    prevMousePosition = currMousePosition;
+            //    currMousePosition = Input.mousePosition;
+            //}
+            //
+            //if (lerpTimer < 1) {
+            //    lerpTimer += 0.05f;
+            //    transform.forward = Vector3.Lerp(transform.forward, playerToPoint, 0.05f);
+            //    Debug.Log(lerpTimer);
+            //}
+        }
+		//prevMousePosition = Input.mousePosition;
 
 		// move
 		//Get arrow key input
@@ -109,14 +132,14 @@ public class Player_Darren : MonoBehaviour {
 		if (shootFreezeTime > 0f) 
 		{
 			shootFreezeTime -= Time.deltaTime;
-			if (shootFreezeTime < 0.1f) {
+			if (shootFreezeTime < 0f) {
 				shootFreezeTime = 0f;
 			}
 		}
-		if (Input.GetMouseButtonDown(0) && shootFreezeTime == 0f)
+		if (Input.GetMouseButton(0) && shootFreezeTime == 0f)
 		{
 			Shoot ();
-			shootFreezeTime = 0.5f;
+			shootFreezeTime = 0.1f;
 		}
 	}
 

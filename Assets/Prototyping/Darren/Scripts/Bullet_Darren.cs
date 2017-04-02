@@ -19,7 +19,7 @@ public class Bullet_Darren : MonoBehaviour {
 	}
 
 	public void Fire(Vector3 direction) {
-		velocity = new Vector3(direction.x, 0, direction.z).normalized;	
+		velocity = new Vector3(direction.x, 0, direction.z).normalized * 5f;	
 	}
 
     private void OnCollisionEnter(Collision collision)

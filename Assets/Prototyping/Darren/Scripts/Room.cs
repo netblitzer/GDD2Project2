@@ -13,6 +13,7 @@ public class Room : MonoBehaviour {
 
     private GameObject fixedObject = null;
     private bool containsEnemy = false;
+    private SpawnPoint spawn;
 
 
     /// <summary>
@@ -21,6 +22,7 @@ public class Room : MonoBehaviour {
     void Start()
     {
         roomContents = new List<GameObject>();
+        spawn = gameObject.GetComponentInChildren<SpawnPoint>();
 
         //Find and add any generators or convetors to the room list.
         foreach (Transform child in transform)
@@ -42,7 +44,15 @@ public class Room : MonoBehaviour {
     void Update()
     {
         //Do stuff based on what is in the room.
-        if (playerStayTime > 0) { playerStayTime -= 1; }
+        if (playerStayTime > 1) {
+            playerStayTime -= 1;
+        }
+        if (spawn != null) {
+            spawn.adjustSpawnChance(-0.25f);
+        }
+
+        GameObject Ply = null;
+        List<Enemy> enemiesInRoom = new List<Enemy>();
 
         if (roomContents.Count > 0)
         {
@@ -50,7 +60,14 @@ public class Room : MonoBehaviour {
             {
                 if (obj.tag == "Player")
                 {
-                    if (playerStayTime < 300) { playerStayTime += 3; }
+                    Ply = obj;
+
+                    if (playerStayTime < 300) {
+                        playerStayTime += 3;
+                    }
+                    if (spawn != null) {
+                        spawn.adjustSpawnChance(1);
+                    }
 
                     if (fixedObject != null)
                     {
@@ -60,15 +77,32 @@ public class Room : MonoBehaviour {
                 else if(obj.tag == "Enemy" && !containsEnemy)
                 {
                     containsEnemy = true;
+                    enemiesInRoom.Add(obj.GetComponent<Enemy>());
                 }//end if enemy
 
             }//end for each in roomcontents
 
         }//end if
 
-        if(containsEnemy && fixedObject != null)
+        Debug.Log(enemiesInRoom.Count);
+
+        if (containsEnemy && fixedObject != null)
         {
             fixedObject.GetComponent<Converter>().onHit(1);
+        }
+        
+        if (spawn != null && Ply != null) {
+            spawn.containsPlayer = true;
+
+            Debug.Log(enemiesInRoom);
+
+            foreach (Enemy e in enemiesInRoom) {
+                e.target = Ply;
+            }
+        } else {
+            foreach (Enemy e in enemiesInRoom) {
+                e.target = null;
+            }
         }
 
         roomContents.Clear();
@@ -88,6 +122,10 @@ public class Room : MonoBehaviour {
         else if (other.tag == "Player")
         {
             roomContents.Add(other.gameObject);
+
+            if (spawn != null) {
+                spawn.containsPlayer = true;
+            }
         }
     }
 }//end of Room
