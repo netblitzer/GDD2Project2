@@ -11,10 +11,17 @@ public class Room : MonoBehaviour {
 
     public int playerStayTime;
 
-    private GameObject fixedObject = null;
+    private GameObject convertor = null;
+    private GameObject generator = null;
     private bool containsEnemy = false;
     private SpawnPoint spawn;
 
+    //Properties
+    public GameObject Convertor
+    { get { return convertor; } }
+
+    public GameObject Generator
+    { get { return generator; } }
 
     /// <summary>
     /// Use this for initialization
@@ -27,11 +34,15 @@ public class Room : MonoBehaviour {
         //Find and add any generators or convetors to the room list.
         foreach (Transform child in transform)
         {
-            if (child.tag == "Generator" || child.tag == "CircleConvertor" || child.tag == "SquareConvertor" || child.tag == "TriangleConvertor")
-
+            if (child.tag == "CircleConvertor" || child.tag == "SquareConvertor" || child.tag == "TriangleConvertor")
             {
-                fixedObject = child.gameObject;
-                roomContents.Add(fixedObject);
+                convertor = child.gameObject;
+                roomContents.Add(convertor);
+            }
+            else if(child.tag == "Generator")
+            {
+                generator = child.gameObject;
+                roomContents.Add(generator);
             }
         }
 
@@ -70,9 +81,13 @@ public class Room : MonoBehaviour {
                         spawn.adjustSpawnChance(1);
                     }
 
-                    if (fixedObject != null)
+                    if (generator != null)
                     {
-                        fixedObject.GetComponent<Converter>().onRepair(1);
+                        generator.GetComponent<Converter>().onRepair(1);
+                    }
+                    else if(convertor != null)
+                    {
+                        convertor.GetComponent<Converter>().onRepair(1);
                     }
                 }//end if player
                 else if(obj.tag == "Enemy" && !containsEnemy)
@@ -88,9 +103,13 @@ public class Room : MonoBehaviour {
         //Debug.Log(enemiesInRoom.Count);
 
         //If a room has enemies in it, damage the convertor in the room.
-        if (containsEnemy && fixedObject != null)
+        if (containsEnemy && convertor != null)
         {
-            fixedObject.GetComponent<Converter>().onHit(1);
+            convertor.GetComponent<Converter>().onHit(1);
+        }
+        else if (containsEnemy && generator != null)
+        {
+            generator.GetComponent<Converter>().onHit(1);
         }
         
         //Tell spawnpoint that the player is in the room.
@@ -114,7 +133,8 @@ public class Room : MonoBehaviour {
 
     private void OnTriggerStay(Collider other)
     {
-        if (fixedObject != null) { roomContents.Add(fixedObject); }
+        if (generator != null) { roomContents.Add(generator); }
+        else if (convertor != null) { roomContents.Add(convertor); }
 
         if (other.tag == "Enemy")
         {
