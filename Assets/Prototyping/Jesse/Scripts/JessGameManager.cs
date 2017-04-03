@@ -11,18 +11,33 @@ public class JessGameManager : MonoBehaviour {
 
     public bool shifting;
 
+    public List<GameObject> generators;
+    public JessPlayer player;
+
     /// <summary>
     /// Use this for initialization
     /// </summary>
     void Start () {
         shifting = false;
+
+        generators = new List<GameObject>(GameObject.FindGameObjectsWithTag("Generator"));
 	}
 
     /// <summary>
     /// Update is called once per frame
     /// </summary>
     void Update () {
+        int currEnergy = 0;
+        foreach (GameObject g in generators)
+        {
+            Generator gen = g.GetComponent<Generator>();    // Get generator script
+            if (gen.Powering)
+            {
+                currEnergy++;
+            }
+        }
 
+        player.SetEnergy(currEnergy);
 	}
 
     /// <summary>

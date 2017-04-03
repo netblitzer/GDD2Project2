@@ -17,10 +17,8 @@ public class JessPlayer : MonoBehaviour {
     private float lerpTimer;
     private DebugLines lines;
 
-    private int energy;
-    private int circleStrength;
-    private int squareStrength;
-    private int triangleStrength;
+    private int energy;         // Could be refactored into *available* energy?
+    private int[] allocation;   // 0 == Square, 1 == Circle, 2 == Triangle
     
     public int Energy
     {
@@ -34,40 +32,9 @@ public class JessPlayer : MonoBehaviour {
         }
     }
 
-    public int CircleStrength
+    public int[] Allocation
     {
-        get { return circleStrength; }
-        set
-        {
-            if (value + triangleStrength + squareStrength <= energy)
-            {
-                circleStrength = value;
-            }
-        }
-    }
-
-    public int SquareStrength
-    {
-        get { return squareStrength; }
-        set
-        {
-            if (value + triangleStrength + circleStrength <= energy)
-            {
-                squareStrength = value;
-            }
-        }
-    }
-
-    public int TriangleStrength
-    {
-        get { return triangleStrength; }
-        set
-        {
-            if (value + circleStrength + squareStrength <= energy)
-            {
-                triangleStrength = value;
-            }
-        }
+        get { return allocation; }
     }
 
     //property for velocity
@@ -212,6 +179,58 @@ public class JessPlayer : MonoBehaviour {
         }
     }
 
+    // Could refactor into RemoveEnergy & AddEnergy
+
+    public bool SetEnergy(int _energy)
+    {
+        if (_energy < 0)
+            return false;
+
+        if (energy > _energy)
+        {
+            int diff = energy - _energy;
+            while (diff > 0)
+            {
+                // Find energy type with highest value, reduce it by 1
+                int max = allocation[0];
+                int index = 0;
+
+                if (allocation[1] > max)
+                {
+                    max = allocation[1];
+                    index = 1;
+                }
+
+                if (allocation[2] > max)
+                {
+                    max = allocation[2];
+                    index = 2;
+                }
+
+                allocation[index]--;
+                diff--;
+            }
+        }
+
+        return true;
+    }
+
+    public void RemoveStrength(int index)
+    {
+        if (index >= 0 && index < allocation.Length)
+            if (allocation[index] > 0)
+                allocation[index]++;
+    }
+
+    public void AddStrength(int index)
+    {
+        if (index >= 0 && index < allocation.Length)
+        {
+            // e.g. if energy = 7 & sum <= 6. . .
+            if (allocation[0] + allocation[1] + allocation[2] < energy)
+                allocation[index]++;
+        }
+    }
 
 	// create a bullet yo!
 	private void Shoot() 
