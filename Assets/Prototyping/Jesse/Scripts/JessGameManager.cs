@@ -37,7 +37,7 @@ public class JessGameManager : MonoBehaviour {
             }
         }
 
-        player.SetEnergy(currEnergy);
+        player.SetPlayerEnergy(currEnergy);
 	}
 
     /// <summary>

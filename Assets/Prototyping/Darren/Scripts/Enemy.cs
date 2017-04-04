@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour {
 
     // public variables to change
     [Tooltip("The max health of the enemy.")]
-    public int maxHealth = 10;
+    public int maxHealth = 9;
 
     [Tooltip("The max speed of the enemy.")]
     public int maxSpeed = 4;

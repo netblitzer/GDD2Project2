@@ -17,19 +17,12 @@ public class JessPlayer : MonoBehaviour {
     private float lerpTimer;
     private DebugLines lines;
 
-    private int energy;         // Could be refactored into *available* energy?
+    private int energy;         // Available energy
     private int[] allocation;   // 0 == Square, 1 == Circle, 2 == Triangle
     
     public int Energy
     {
         get { return energy; }
-        set
-        {
-            if (value <= 10 && value >= 0)
-            {
-                energy = value;
-            }
-        }
     }
 
     public int[] Allocation
@@ -181,10 +174,15 @@ public class JessPlayer : MonoBehaviour {
 
     // Could refactor into RemoveEnergy & AddEnergy
 
-    public bool SetEnergy(int _energy)
+    public bool SetPlayerEnergy(int _energy)
     {
         if (_energy < 0)
             return false;
+
+        if (energy < _energy)
+        {
+            energy = _energy;
+        }
 
         if (energy > _energy)
         {
@@ -208,6 +206,7 @@ public class JessPlayer : MonoBehaviour {
                 }
 
                 allocation[index]--;
+                energy--;
                 diff--;
             }
         }
@@ -215,20 +214,27 @@ public class JessPlayer : MonoBehaviour {
         return true;
     }
 
-    public void RemoveStrength(int index)
+    // For when player removes energy
+    public void SubStrength(int index)
     {
         if (index >= 0 && index < allocation.Length)
             if (allocation[index] > 0)
-                allocation[index]++;
+            {
+                allocation[index]--;
+                energy++;
+            }
     }
 
+    // For when player adds energy
     public void AddStrength(int index)
     {
         if (index >= 0 && index < allocation.Length)
         {
-            // e.g. if energy = 7 & sum <= 6. . .
-            if (allocation[0] + allocation[1] + allocation[2] < energy)
+            if (energy >= 0)
+            {
                 allocation[index]++;
+                energy--;
+            }
         }
     }
 
