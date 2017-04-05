@@ -17,8 +17,11 @@ public class Room : MonoBehaviour
 
     private GameObject convertor = null;
     private GameObject generator = null;
+    private GameObject player = null;
     private bool containsEnemy = false;
     private SpawnPoint spawn;
+	private GameManager gameManager;
+	private Converter converterBehavior;
 
     //Properties
     public GameObject Convertor
@@ -34,6 +37,7 @@ public class Room : MonoBehaviour
     {
         roomContents = new List<GameObject>();
         spawn = gameObject.GetComponentInChildren<SpawnPoint>();
+		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 
         //Find and add any generators or convetors to the room list.
         foreach (Transform child in transform)
@@ -41,6 +45,7 @@ public class Room : MonoBehaviour
             if (child.tag == "CircleConvertor" || child.tag == "SquareConvertor" || child.tag == "TriangleConvertor")
             {
                 convertor = child.gameObject;
+                converterBehavior = convertor.GetComponent<Converter>();
                 roomContents.Add(convertor);
             }
             else if (child.tag == "Generator")
@@ -61,17 +66,12 @@ public class Room : MonoBehaviour
         roomCount = roomContents.Count;
 
         //Do stuff based on what is in the room.
-        if (playerStayTime > 1)
-        {
-            playerStayTime -= 1;
-        }
         if (spawn != null)
         {
             spawn.adjustSpawnChance(-0.25f);
         }
 
-        GameObject Ply = null;
-        List<Enemy> enemiesInRoom = new List<Enemy>();
+        containsEnemy = false;
 
         if (roomContents.Count > 0)
         {
@@ -79,13 +79,7 @@ public class Room : MonoBehaviour
             {
                 if (obj.tag == "Player")
                 {
-                    //Debug.Log(enemiesInRoom.Count);
-                    Ply = obj;
 
-                    if (playerStayTime < 300)
-                    {
-                        playerStayTime += 3;
-                    }
                     if (spawn != null)
                     {
                         spawn.adjustSpawnChance(1);
@@ -100,10 +94,11 @@ public class Room : MonoBehaviour
                         convertor.GetComponent<Converter>().onRepair(1);
                     }
                 }//end if player
-                else if (obj.tag == "Enemy" && !containsEnemy)
+
+                else if (obj.tag == "Enemy")
                 {
                     containsEnemy = true;
-                    enemiesInRoom.Add(obj.GetComponent<Enemy>());
+                    obj.GetComponent<Enemy>().target = player;
                 }//end if enemy
 
             }//end for each in roomcontents
@@ -120,26 +115,6 @@ public class Room : MonoBehaviour
         else if (containsEnemy && generator != null)
         {
             generator.GetComponent<Converter>().onHit(1);
-        }
-
-        //Tell spawnpoint that the player is in the room.
-        if (spawn != null && Ply != null)
-        {
-            spawn.containsPlayer = true;
-
-            //Debug.Log(enemiesInRoom);
-
-            foreach (Enemy e in enemiesInRoom)
-            {
-                e.target = Ply;
-            }
-        }
-        else
-        {
-            foreach (Enemy e in enemiesInRoom)
-            {
-                e.target = null;
-            }
         }
 
         /*
@@ -173,7 +148,15 @@ public class Room : MonoBehaviour
         if (other.tag == "Player")
         {
             roomContents.Add(other.gameObject);
+            player = other.gameObject;
             containsPlayer = true;
+
+			// activate plus button on UI if there is a converter in this room with the player
+			if (convertor != null) 
+			{
+				//gameManager.ActivateEnergyType (converterBehavior.Type);
+
+			}
 
             if (spawn != null)
             {
@@ -192,6 +175,7 @@ public class Room : MonoBehaviour
         if (other.tag == "Player")
         {
             roomContents.Add(other.gameObject);
+            player = null;
             containsPlayer = false;
 
             if (spawn != null)
