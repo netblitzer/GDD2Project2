@@ -8,7 +8,9 @@ public class EnemyManager : MonoBehaviour {
     public Dictionary<Vector2, SpawnPoint> spawns;
     public List<Enemy> enemies;
     public List<Vector2> keys;
-    public GameObject enemyPrefab;
+    public GameObject enemySquarePrefab;
+    public GameObject enemyCirclePrefab;
+    public GameObject enemyTrianglePrefab;
 
     [Tooltip("A multiplier to make things more or less difficult through the game")]
     public float difficulty = 1f;
@@ -53,10 +55,28 @@ public class EnemyManager : MonoBehaviour {
 
         keys = spawns.Keys.ToList<Vector2>();
 
-        //int startAmount = (int)(Random.Range(10f, 20f) * difficulty);
-        int startAmount = 500;
+        int startAmount = (int)(Random.Range(10f, 20f) * difficulty);
+        //int startAmount = 500;
         for (int i = 0; i < startAmount; i++) {
-            GameObject newEnemy = GameObject.Instantiate<GameObject>(enemyPrefab);
+            //GameObject newEnemy = GameObject.Instantiate<GameObject>(enemyPrefab);
+
+            //Create an Enemy based on type;
+            GameObject newEnemy;
+            EnemyTypes type = (EnemyTypes)((int)Random.Range(0, 3));
+            switch (type)
+            {
+                default:
+                case EnemyTypes.triangle:
+                    newEnemy = GameObject.Instantiate<GameObject>(enemySquarePrefab);
+                    break;
+                case EnemyTypes.square:
+                    newEnemy = GameObject.Instantiate<GameObject>(enemyCirclePrefab);
+                    break;
+                case EnemyTypes.circle:
+                    newEnemy = GameObject.Instantiate<GameObject>(enemyTrianglePrefab);
+                    break;
+            }
+
 
             // spawn them in a random room
             int room = (int)Random.Range(0f, spawns.Count);
@@ -64,7 +84,7 @@ public class EnemyManager : MonoBehaviour {
             // initialize the enemy
             Enemy eScript = newEnemy.GetComponent<Enemy>();
             Vector3 spawnLoc = (spawns[keys[room]].gameObject.transform.position - new Vector3(Random.Range(-7f, 7f), 10.5f, Random.Range(-4f, 4f)));
-            eScript.init(maxHealth, maxSpeed, maxForce, maxDamage, (EnemyTypes)((int)Random.Range(0, 3)), spawnLoc, null);
+            eScript.init(maxHealth, maxSpeed, maxForce, maxDamage, type, spawnLoc, null);
             enemyCount++;
             eScript.name = "Enemy Number " + enemyCount.ToString();
 

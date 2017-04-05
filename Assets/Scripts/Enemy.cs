@@ -73,6 +73,7 @@ public class Enemy : MonoBehaviour {
         //Debug.Log(_type);
         type = _type;
 
+        /*
         switch (_type) {
             default:
             case EnemyTypes.triangle:
@@ -85,6 +86,7 @@ public class Enemy : MonoBehaviour {
                 gameObject.GetComponent<Renderer>().material.color = Color.blue;
                 break;
         }
+        */
 
         if (_startPos != null) {
             position = _startPos;

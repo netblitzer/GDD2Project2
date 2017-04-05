@@ -11,6 +11,9 @@ public class Room : MonoBehaviour
     public List<GameObject> roomContents;
 
     public int playerStayTime;
+    public int roomCount;
+    public bool containsPlayer = false;
+
 
     private GameObject convertor = null;
     private GameObject generator = null;
@@ -55,6 +58,8 @@ public class Room : MonoBehaviour
     /// </summary>
     void Update()
     {
+        roomCount = roomContents.Count;
+
         //Do stuff based on what is in the room.
         if (playerStayTime > 1)
         {
@@ -136,18 +141,31 @@ public class Room : MonoBehaviour
                 e.target = null;
             }
         }
-        Debug.Log(roomContents.Count);
 
-        roomContents.Clear();
-        containsEnemy = false;
-    }//end Update
+        /*
+        //roomContents.Clear();
 
-    private void OnTriggerStay(Collider other)
-    {
+        //Make sure to keep the generator/convertor in the room list
         if (generator != null) { roomContents.Add(generator); }
         else if (convertor != null) { roomContents.Add(convertor); }
+        */
 
-        if (other.tag == "Enemy")
+        containsEnemy = false;
+
+        foreach (GameObject g in roomContents)
+        {
+            if (g.tag == "Enemy")
+            {
+                containsEnemy = true;
+                break;
+            }
+        }
+    }//end Update
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Enemy")
         {
             roomContents.Add(other.gameObject);
         }
@@ -155,12 +173,45 @@ public class Room : MonoBehaviour
         if (other.tag == "Player")
         {
             roomContents.Add(other.gameObject);
+            containsPlayer = true;
 
             if (spawn != null)
             {
                 spawn.containsPlayer = true;
             }
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            roomContents.Remove(other.gameObject);
+        }
+
+        if (other.tag == "Player")
+        {
+            roomContents.Add(other.gameObject);
+            containsPlayer = false;
+
+            if (spawn != null)
+            {
+                spawn.containsPlayer = false;
+            }
+        }
+    }
+
+    /*
+    private void OnTriggerStay(Collider other)
+    {
+        
+        if (other.tag == "Enemy")
+        {
+            roomContents.Add(other.gameObject);
+        }
+
+        
     }//end On Trigger Stay
+    */
 
 }//end of Room
