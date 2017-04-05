@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     private float currentEnergy1 = 9;
     private float currentEnergy2 = 6;
     private float currentEnergy3 = 3;
+    private float unusedEnergy = 1;
 
     [SerializeField]
     private Image healthBar;
@@ -22,6 +23,8 @@ public class GameManager : MonoBehaviour
     private Image energy2;
     [SerializeField]
     private Image energy3;
+    [SerializeField]
+    private Image energyEmpty;
 
     private float minHealth = 0;
     private float maxHealth = 100;
