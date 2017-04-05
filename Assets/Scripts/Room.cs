@@ -154,8 +154,7 @@ public class Room : MonoBehaviour
 			// activate plus button on UI if there is a converter in this room with the player
 			if (convertor != null) 
 			{
-				//gameManager.ActivateEnergyType (converterBehavior.Type);
-
+				converterBehavior.ActivateConversion ();
 			}
 
             if (spawn != null)
@@ -182,6 +181,11 @@ public class Room : MonoBehaviour
             {
                 spawn.containsPlayer = false;
             }
+
+			if (convertor != null) 
+			{
+				converterBehavior.DeactivateConversion ();
+			}
         }
     }
 

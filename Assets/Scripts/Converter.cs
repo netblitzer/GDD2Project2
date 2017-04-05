@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Converter : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class Converter : MonoBehaviour
     public int health = 1000;
     private bool active;
     private string type;
+
+	public Button myPlusButton; // reference to the pluss button to activate when we enter the room this converter is in
+	private PlusButton plusButton; // script for my plus button
 
     public int Health
     {
@@ -32,6 +36,7 @@ public class Converter : MonoBehaviour
         type = gameObject.tag;     // Question voodoo. . .?
                                    // Answer More voodoo. this not needed. gameObject is this. O.o
                                    // ^ Cool rap
+		plusButton = myPlusButton.GetComponent<PlusButton>();
     }
 
     // Update is called once per frame
@@ -75,6 +80,16 @@ public class Converter : MonoBehaviour
             health = 1000;
         }
     }
+
+	public void ActivateConversion()
+	{
+		plusButton.Activate ();
+	}
+
+	public void DeactivateConversion()
+	{
+		plusButton.DeActivate ();
+	}
 
 
 }
