@@ -45,6 +45,7 @@ public class Room : MonoBehaviour
             if (child.tag == "CircleConvertor" || child.tag == "SquareConvertor" || child.tag == "TriangleConvertor")
             {
                 convertor = child.gameObject;
+                converterBehavior = convertor.GetComponent<Converter>();
                 roomContents.Add(convertor);
             }
             else if (child.tag == "Generator")
