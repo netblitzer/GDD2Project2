@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public bool debug;
-    public float health;
-    public float maxSpeed;
-    public GameObject bulletPrefab;
+	public GameObject bulletPrefab;
+
+    private bool debug;
+    private float health;
+    private float maxSpeed;
 
     private Vector3 velocity;
     private float speed;
@@ -19,6 +20,25 @@ public class Player : MonoBehaviour
 
     private int energy;         // Available energy
     private int[] allocation;   // 0 == Square, 1 == Circle, 2 == Triangle
+
+
+	//Properties
+	public float Health 
+	{
+		set { health = value; }
+		get { return health; }
+	}
+
+	public float MaxSpeed 
+	{
+		set { maxSpeed = value; }
+		get { return maxSpeed; }
+	}
+
+	public bool Debug 
+	{
+		set { debug = value; }
+	}
 
     public int Energy
     {
@@ -161,6 +181,8 @@ public class Player : MonoBehaviour
         // lastly regen health over time
         health = validateHealth(health += Time.deltaTime);
 
+
+        //Debug.Log("Update: " + allocation[0]);
     }//end of Update
 
     // validate health value, keep between 0 and 100 (like, duh)
@@ -185,55 +207,59 @@ public class Player : MonoBehaviour
         if (_energy < 0)
             return false;
 
-        if (energy < _energy)
-        {
-            energy = _energy;
-        }
+        //if (energy < _energy)
+        //{
+        //    energy = _energy;
+        //}
 
-        if (energy > _energy)
-        {
-            int diff = energy - _energy;
-            while (diff > 0)
-            {
-                // Find energy type with highest value, reduce it by 1
-                int max = allocation[0];
-                int index = 0;
+        //if (energy > _energy)
+        //{
+        //    int diff = energy - _energy;
+        //    while (diff > 0)
+        //    {
+        //        // Find energy type with highest value, reduce it by 1
+        //        int max = allocation[0];
+        //        int index = 0;
 
-                if (allocation[1] > max)
-                {
-                    max = allocation[1];
-                    index = 1;
-                }
+        //        if (allocation[1] > max)
+        //        {
+        //            max = allocation[1];
+        //            index = 1;
+        //        }
 
-                if (allocation[2] > max)
-                {
-                    max = allocation[2];
-                    index = 2;
-                }
+        //        if (allocation[2] > max)
+        //        {
+        //            max = allocation[2];
+        //            index = 2;
+        //        }
 
-                allocation[index]--;
-                energy--;
-                diff--;
-            }
-        }
-
+        //        allocation[index]--;
+        //        energy--;
+        //        diff--;
+        //    }
+        //}
         return true;
     }
 
     // For when player removes energy
     public void SubStrength(int index)
     {
+        //Debug.Log("Before: " + allocation[0] + "  " + allocation[1] + "  " + allocation[2] + "  " + index);
         if (index >= 0 && index < allocation.Length)
             if (allocation[index] > 0)
             {
+                Debug.Log(index);
                 allocation[index]--;
                 energy++;
             }
+
+        //Debug.Log("After: " + allocation[0] + "  " + allocation[1] + "  " + allocation[2]);
     }
 
     // For when player adds energy
     public void AddStrength(int index)
     {
+       
         if (index >= 0 && index < allocation.Length)
         {
             if (energy >= 0)

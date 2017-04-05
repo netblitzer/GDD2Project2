@@ -19,6 +19,7 @@ public class MinusButton : MonoBehaviour {
 	
 	void Minus()
 	{
+        Debug.Log("Type: " + Type);
 		player.SubStrength (Type);
 	}
 }

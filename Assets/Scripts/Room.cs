@@ -7,18 +7,18 @@ using UnityEngine;
 /// </summary>
 public class Room : MonoBehaviour
 {
-
-    public List<GameObject> roomContents;
-
-    public int playerStayTime;
-    public int roomCount;
-    public bool containsPlayer = false;
-
+	private List<GameObject> roomContents;
+	private List<GameObject> toRemove;
 
     private GameObject convertor = null;
     private GameObject generator = null;
     private GameObject player = null;
+
     private bool containsEnemy = false;
+	private bool containsPlayer = false;
+
+	private int roomCount;
+
     private SpawnPoint spawn;
 	private GameManager gameManager;
 	private Converter converterBehavior;
@@ -36,6 +36,7 @@ public class Room : MonoBehaviour
     void Start()
     {
         roomContents = new List<GameObject>();
+		toRemove = new List<GameObject> ();
         spawn = gameObject.GetComponentInChildren<SpawnPoint>();
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 
@@ -87,7 +88,7 @@ public class Room : MonoBehaviour
 
                     if (generator != null)
                     {
-                        generator.GetComponent<Converter>().onRepair(1);
+                        generator.GetComponent<Generator>().onRepair(1);
                     }
                     else if (convertor != null)
                     {
@@ -97,11 +98,21 @@ public class Room : MonoBehaviour
 
                 else if (obj.tag == "Enemy")
                 {
-                    containsEnemy = true;
-                    obj.GetComponent<Enemy>().target = player;
+					if (obj.GetComponent<Enemy> ().isDead()) 
+					{
+						toRemove.Add (obj.gameObject);
+					} 
+
+					containsEnemy = true;
+					obj.GetComponent<Enemy> ().target = player;
+				
                 }//end if enemy
 
             }//end for each in roomcontents
+			foreach (GameObject g in toRemove) 
+			{
+				roomContents.Remove (g);
+			}
 
         }//end if
 
@@ -114,7 +125,7 @@ public class Room : MonoBehaviour
         }
         else if (containsEnemy && generator != null)
         {
-            generator.GetComponent<Converter>().onHit(1);
+            //generator.GetComponent<Generator>().onHit(1);
         }
 
         /*

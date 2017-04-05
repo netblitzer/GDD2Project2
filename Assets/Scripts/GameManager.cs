@@ -114,13 +114,11 @@ public class GameManager : MonoBehaviour
 
     private void UpdateNumbers()
     {
-        currentHealth = player.health;
+        currentHealth = player.Health;
 
         currentEnergy1 = player.Allocation[0] + 1;
         currentEnergy2 = player.Allocation[1] + 1;
         currentEnergy3 = player.Allocation[2] + 1;
-
-        //Debug.Log(player.Allocation[0] + 1);
     }
 
     //Maps resource values to 0-1 scale for use with UI
