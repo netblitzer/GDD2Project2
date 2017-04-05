@@ -38,7 +38,6 @@ public class Room : MonoBehaviour
         roomContents = new List<GameObject>();
         spawn = gameObject.GetComponentInChildren<SpawnPoint>();
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
-		converterBehavior = convertor.GetComponent<GameManager> ();
 
         //Find and add any generators or convetors to the room list.
         foreach (Transform child in transform)
