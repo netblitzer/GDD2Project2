@@ -19,6 +19,8 @@ public class Room : MonoBehaviour
     private GameObject generator = null;
     private bool containsEnemy = false;
     private SpawnPoint spawn;
+	private GameManager gameManager;
+	private Converter converterBehavior;
 
     //Properties
     public GameObject Convertor
@@ -34,6 +36,8 @@ public class Room : MonoBehaviour
     {
         roomContents = new List<GameObject>();
         spawn = gameObject.GetComponentInChildren<SpawnPoint>();
+		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+		converterBehavior = convertor.GetComponent<GameManager> ();
 
         //Find and add any generators or convetors to the room list.
         foreach (Transform child in transform)
@@ -174,6 +178,13 @@ public class Room : MonoBehaviour
         {
             roomContents.Add(other.gameObject);
             containsPlayer = true;
+
+			// activate plus button on UI if there is a converter in this room with the player
+			if (convertor != null) 
+			{
+				//gameManager.ActivateEnergyType (converterBehavior.Type);
+
+			}
 
             if (spawn != null)
             {
