@@ -205,7 +205,7 @@ public class Enemy : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.tag == "Bullet") {
-            Debug.Log("Bullet Hit Enemy");
+            //Debug.Log("Bullet Hit Enemy");
             damageEnemy(1.0f);
         }
 

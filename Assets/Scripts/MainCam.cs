@@ -12,6 +12,7 @@ public class MainCam : MonoBehaviour
 
     private Vector3 moveTo;
 
+
     /// <summary>
     /// Use this for initialization
     /// Set the moveTo position to be the starting position.
@@ -40,4 +41,5 @@ public class MainCam : MonoBehaviour
     {
         moveTo = target;
     }
+    
 }

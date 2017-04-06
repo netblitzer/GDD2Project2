@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-	public GameObject bulletPrefab;
+    public float health;
+
+    public float maxSpeed;
+
+    public GameObject bulletPrefab;
 
     private bool debug;
-    private float health;
-    private float maxSpeed;
+    private bool freeze;
 
     private Vector3 velocity;
     private float speed;
@@ -22,20 +25,13 @@ public class Player : MonoBehaviour
     private int[] allocation;   // 0 == Square, 1 == Circle, 2 == Triangle
 
 
-	//Properties
-	public float Health 
-	{
-		set { health = value; }
-		get { return health; }
-	}
+    //Properties
+    public bool Freeze
+    {
+        set { freeze = value; }
+    }
 
-	public float MaxSpeed 
-	{
-		set { maxSpeed = value; }
-		get { return maxSpeed; }
-	}
-
-	public bool Debug 
+    public bool Debugger 
 	{
 		set { debug = value; }
 	}
@@ -77,6 +73,8 @@ public class Player : MonoBehaviour
         allocation[0] = 3;
         allocation[1] = 3;
         allocation[2] = 3;
+
+        freeze = false;
     }
 
     // Update is called once per frame
@@ -115,53 +113,55 @@ public class Player : MonoBehaviour
             speed += .1f;
         }
 
-
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        if (!freeze)
         {
-            velocity += new Vector3(-1, 0, 0);
-        }
-        else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-        {
-            velocity += new Vector3(1, 0, 0);
-        }
-        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
-        {
-
-            velocity += new Vector3(0, 0, 1);
-        }
-        else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
-        {
-
-            velocity += new Vector3(0, 0, -1);
-        }
-
-        // friction
-        else if (!Input.anyKey)
-        {
-            if (speed > 0f)
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
-                speed -= 0.1f;
-                // make sure speed gets to 0
-                if (speed < 0.1f)
+                velocity += new Vector3(-1, 0, 0);
+            }
+            else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            {
+                velocity += new Vector3(1, 0, 0);
+            }
+            if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
+            {
+
+                velocity += new Vector3(0, 0, 1);
+            }
+            else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+            {
+
+                velocity += new Vector3(0, 0, -1);
+            }
+
+            // friction
+            else if (!Input.anyKey)
+            {
+                if (speed > 0f)
                 {
-                    speed = 0f;
+                    speed -= 0.1f;
+                    // make sure speed gets to 0
+                    if (speed < 0.1f)
+                    {
+                        speed = 0f;
+                    }
+                }
+                else if (speed < 0f)
+                {
+                    speed += 0.1f;
+                    // make sure speed gets to 0
+                    if (speed > -0.1f)
+                    {
+                        speed = 0f;
+                    }
                 }
             }
-            else if (speed < 0f)
-            {
-                speed += 0.1f;
-                // make sure speed gets to 0
-                if (speed > -0.1f)
-                {
-                    speed = 0f;
-                }
-            }
-        }
 
-        // clamp speed
-        speed = Mathf.Clamp(speed, 0, maxSpeed);
-        charControl.Move(velocity.normalized * speed * Time.deltaTime);
-        velocity = Vector3.zero;
+            // clamp speed
+            speed = Mathf.Clamp(speed, 0, maxSpeed);
+            charControl.Move(velocity.normalized * speed * Time.deltaTime);
+            velocity = Vector3.zero;
+        }
 
         // shoot logic
         if (shootFreezeTime > 0f)

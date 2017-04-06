@@ -28,9 +28,12 @@ public class GameManager : MonoBehaviour
 
     private float minHealth = 0;
     private float maxHealth = 100;
+
+    private Vector3 lastCamPos;
     //---------------------------------------------------------------------------
 
     public GameObject myCamera;
+    public GameObject mapSpot;
 
     public bool shifting;
 
@@ -69,6 +72,23 @@ public class GameManager : MonoBehaviour
         }
 
         player.SetPlayerEnergy(currEnergy);
+
+        if(Input.GetKeyDown(KeyCode.M))
+        {
+            myCamera.GetComponent<Camera>().cullingMask = -257;
+            myCamera.GetComponent<MainCam>().MoveCamera(mapSpot.transform.position);
+            myCamera.transform.position = mapSpot.transform.position;
+            player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            player.Freeze = true;
+        }
+        if (Input.GetKeyUp(KeyCode.M))
+        {
+            myCamera.GetComponent<Camera>().cullingMask = -1;
+            myCamera.GetComponent<MainCam>().MoveCamera(lastCamPos);
+            myCamera.transform.position = lastCamPos;
+            player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+            player.Freeze = false;
+        }
     }
 
     /// <summary>
@@ -81,6 +101,7 @@ public class GameManager : MonoBehaviour
         {
             shifting = true;
             myCamera.GetComponent<MainCam>().MoveCamera(target);
+            lastCamPos = target;
         }
 
     }
@@ -114,7 +135,7 @@ public class GameManager : MonoBehaviour
 
     private void UpdateNumbers()
     {
-        currentHealth = player.Health;
+        currentHealth = player.health;
 
         currentEnergy1 = player.Allocation[0] + 1;
         currentEnergy2 = player.Allocation[1] + 1;

@@ -17,7 +17,7 @@ public class Room : MonoBehaviour
     private bool containsEnemy = false;
 	private bool containsPlayer = false;
 
-	private int roomCount;
+	public int roomCount;
 
     private SpawnPoint spawn;
 	private GameManager gameManager;

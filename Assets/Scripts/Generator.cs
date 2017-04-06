@@ -5,7 +5,7 @@ using UnityEngine;
 public class Generator : MonoBehaviour
 {
 
-    private int health;
+    public int health;
     private bool powering;
 
     public int Health
