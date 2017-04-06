@@ -30,7 +30,7 @@ public class Generator : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        health = 10;
+        health = 1000;
         powering = true;
     }
 

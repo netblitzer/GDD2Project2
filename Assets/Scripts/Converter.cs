@@ -43,7 +43,7 @@ public class Converter : MonoBehaviour
     /// </summary>
     void Start()
     {
-        health = 10;
+        health = 1000;
         active = true;
         type = gameObject.tag;     // Question voodoo. . .?
                                    // Answer More voodoo. this not needed. gameObject is this. O.o

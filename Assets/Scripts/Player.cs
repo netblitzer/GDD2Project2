@@ -17,7 +17,11 @@ public class Player : MonoBehaviour
     private float speed;
     private Vector3 prevMousePosition;
     private Vector3 currMousePosition;
+
     private float shootFreezeTime;
+
+    [SerializeField]
+    private float shootTime;
 
     private DebugLines lines;
 
@@ -26,6 +30,12 @@ public class Player : MonoBehaviour
 
 
     //Properties
+    public float ShootTime
+    {
+        get { return shootTime; }
+        set { shootTime = value; }
+    }
+
     public bool Freeze
     {
         set { freeze = value; }
@@ -175,7 +185,7 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButton(0) && shootFreezeTime == 0f)
         {
             Shoot();
-            shootFreezeTime = 0.25f;
+            shootFreezeTime = shootTime;
         }
 
         // lastly regen health over time
@@ -278,8 +288,24 @@ public class Player : MonoBehaviour
         bulletBehavior.Fire(transform.forward);
     }
 
+    /// <summary>
+    /// Add player's allocated energy together
+    /// </summary>
+    /// <returns>Sum of energy allocation</returns>
     private int SumAllocation()
     {
         return allocation[0] + allocation[1] + allocation[2];
+    }
+
+    /// <summary>
+    /// Check if player is dead.
+    /// </summary>
+    /// <returns>True if player is dead else false</returns>
+    public bool IsDead()
+    {
+        if (health <= 0)
+            return true;
+        else
+            return false;
     }
 }//end of player

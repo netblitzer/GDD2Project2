@@ -40,6 +40,8 @@ public class Enemy : MonoBehaviour {
     private Vector2 positionXY;
     private Vector3 wanderPos;
     private float wanderTimer = 0;
+    private GameManager gm;
+
     public GameObject target;
 
     // enemy variables
@@ -52,6 +54,8 @@ public class Enemy : MonoBehaviour {
 
     // constructor
     public void init(int _maxH, int _maxS, int _maxF, float _damage, EnemyTypes _type, Vector3 _startPos, GameObject _target) {
+        gm = GameObject.FindObjectOfType<GameManager>();
+
         maxHealth = _maxH;
         maxSpeed = _maxS;
         maxForce = _maxF;
@@ -205,8 +209,9 @@ public class Enemy : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.tag == "Bullet") {
-            //Debug.Log("Bullet Hit Enemy");
-            damageEnemy(1.0f);
+
+            //Say hey GM tell me how much damage to take.
+            damageEnemy(gm.TakeDamage(type));
         }
 
     }

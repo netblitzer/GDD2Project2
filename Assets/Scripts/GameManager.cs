@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject myCamera;
     public GameObject mapSpot;
+    public GameObject GOText;
 
     public bool shifting;
 
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void Start()
     {
+        GOText.SetActive(false);
         shifting = false;
 
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
@@ -57,6 +59,13 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void Update()
     {
+        //Check if player is dead
+        if(player.IsDead())
+        {
+            player.Freeze = true;
+            GOText.SetActive(true);
+        }
+
         UpdateNumbers();
 
         HandleBars();
@@ -149,6 +158,11 @@ public class GameManager : MonoBehaviour
     private float MapResource(float value, float inMin, float inMax, float outMin, float outMax)
     {
         return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+    }
+
+    public float TakeDamage(EnemyTypes type)
+    {
+        return player.Allocation[(int)type] + 1.0f;
     }
 
 }//end of Game Manager
