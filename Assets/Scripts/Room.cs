@@ -18,6 +18,7 @@ public class Room : MonoBehaviour
 	private bool containsPlayer = false;
 
 	public int roomCount;
+    public GameObject[] InRoom;
 
     private SpawnPoint spawn;
 	private GameManager gameManager;
@@ -65,6 +66,7 @@ public class Room : MonoBehaviour
     void Update()
     {
         roomCount = roomContents.Count;
+        InRoom = roomContents.ToArray();
 
         //Do stuff based on what is in the room.
         if (spawn != null)
@@ -162,11 +164,11 @@ public class Room : MonoBehaviour
             player = other.gameObject;
             containsPlayer = true;
 
-			// activate plus button on UI if there is a converter in this room with the player
-			if (convertor != null) 
-			{
-				converterBehavior.ActivateConversion ();
-			}
+            // activate plus button on UI if there is a converter in this room with the player
+            if (convertor != null)
+            {
+                converterBehavior.ActivateConversion();
+            }
 
             if (spawn != null)
             {
@@ -184,7 +186,7 @@ public class Room : MonoBehaviour
 
         if (other.tag == "Player")
         {
-            roomContents.Add(other.gameObject);
+            roomContents.Remove(other.gameObject);
             player = null;
             containsPlayer = false;
 

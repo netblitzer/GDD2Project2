@@ -207,37 +207,36 @@ public class Player : MonoBehaviour
         if (_energy < 0)
             return false;
 
-        //if (energy < _energy)
-        //{
-        //    energy = _energy;
-        //}
+        if (SumAllocation() < _energy)
+        {
+            energy = _energy - SumAllocation();
+        }
+        else if (SumAllocation() > _energy)
+        {
+            int diff = SumAllocation() - _energy;
+            while (diff > 0)
+            {
+                // Find energy type with highest value, reduce it by 1
+                int max = allocation[0];
+                int index = 0;
 
-        //if (energy > _energy)
-        //{
-        //    int diff = energy - _energy;
-        //    while (diff > 0)
-        //    {
-        //        // Find energy type with highest value, reduce it by 1
-        //        int max = allocation[0];
-        //        int index = 0;
+                if (allocation[1] > max)
+                {
+                    max = allocation[1];
+                    index = 1;
+                }
 
-        //        if (allocation[1] > max)
-        //        {
-        //            max = allocation[1];
-        //            index = 1;
-        //        }
+                if (allocation[2] > max)
+                {
+                    max = allocation[2];
+                    index = 2;
+                }
 
-        //        if (allocation[2] > max)
-        //        {
-        //            max = allocation[2];
-        //            index = 2;
-        //        }
-
-        //        allocation[index]--;
-        //        energy--;
-        //        diff--;
-        //    }
-        //}
+                allocation[index]--;
+                diff--;
+            }
+        }
+        
         return true;
     }
 
@@ -262,7 +261,7 @@ public class Player : MonoBehaviour
        
         if (index >= 0 && index < allocation.Length)
         {
-            if (energy >= 0)
+            if (energy > 0)
             {
                 allocation[index]++;
                 energy--;
@@ -277,5 +276,10 @@ public class Player : MonoBehaviour
         bullet.transform.position = transform.position + transform.forward;
         Bullet bulletBehavior = bullet.GetComponent<Bullet>();
         bulletBehavior.Fire(transform.forward);
+    }
+
+    private int SumAllocation()
+    {
+        return allocation[0] + allocation[1] + allocation[2];
     }
 }//end of player

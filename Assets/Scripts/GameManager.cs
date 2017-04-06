@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviour
         energy1.fillAmount = MapResource(currentEnergy1, 0, 10, 0, 1);
         energy2.fillAmount = MapResource(currentEnergy2, 0, 10, 0, 1);
         energy3.fillAmount = MapResource(currentEnergy3, 0, 10, 0, 1);
-
+        energyEmpty.fillAmount = MapResource(unusedEnergy, 0, 10, 0, 1);
     }
 
     private void UpdateNumbers()
@@ -140,6 +140,8 @@ public class GameManager : MonoBehaviour
         currentEnergy1 = player.Allocation[0] + 1;
         currentEnergy2 = player.Allocation[1] + 1;
         currentEnergy3 = player.Allocation[2] + 1;
+
+        unusedEnergy = player.Energy + 1;
     }
 
     //Maps resource values to 0-1 scale for use with UI
