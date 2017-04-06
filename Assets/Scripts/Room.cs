@@ -125,7 +125,7 @@ public class Room : MonoBehaviour
         }
         else if (containsEnemy && generator != null)
         {
-            //generator.GetComponent<Generator>().onHit(1);
+            generator.GetComponent<Generator>().onHit(1);
         }
 
         /*

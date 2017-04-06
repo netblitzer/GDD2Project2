@@ -5,23 +5,32 @@ using UnityEngine;
 public class Generator : MonoBehaviour
 {
 
-    public int health;
+    [SerializeField]
+    private int health;
+
+    [SerializeField]
     private bool powering;
 
+    public Material[] materials;
+
+    //Properties
     public int Health
     {
         get { return health; }
+        set { health = value; }
     }
-
+    
     public bool Powering
     {
         get { return powering; }
+        set { powering = value; }
     }
+
 
     // Use this for initialization
     void Start()
     {
-        health = 1000;
+        health = 10;
         powering = true;
     }
 
@@ -41,12 +50,13 @@ public class Generator : MonoBehaviour
         {
             health = 0;
             powering = false;
+            gameObject.GetComponent<Renderer>().sharedMaterial = materials[1];
         }
         else
         {
             health -= damage;
         }
-    }
+    }//end of OnHit
 
     /// <summary>
     /// Handles repair processing for generators
@@ -55,9 +65,10 @@ public class Generator : MonoBehaviour
     /// <param name="regen">Integer value > 0 of how much to repair by</param>
     public void onRepair(int regen)
     {
-        if (health == 0 && regen > 0)
+        if (health < 1 && regen > 0)
         {
             powering = true;
+            gameObject.GetComponent<Renderer>().sharedMaterial = materials[0];
         }
 
         health += regen;
@@ -65,5 +76,6 @@ public class Generator : MonoBehaviour
         {
             health = 100;
         }
-    }
-}
+    }//end of Repair
+
+}//end of Generator

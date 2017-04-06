@@ -5,14 +5,24 @@ using UnityEngine.UI;
 
 public class Converter : MonoBehaviour
 {
+    public Button myPlusButton; // reference to the pluss button to activate when we enter the room this converter is in
 
-    public int health = 1000;
+    public Material[] materials;
+
+    [SerializeField]
+    private int health = 1000;
+
+    [SerializeField]
     private bool active;
+
+    [SerializeField]
     private string type;
 
-	public Button myPlusButton; // reference to the pluss button to activate when we enter the room this converter is in
 	private PlusButton plusButton; // script for my plus button
 
+
+    //Properties
+    //---------------------------------------------------------
     public int Health
     {
         get { return health; }
@@ -28,21 +38,18 @@ public class Converter : MonoBehaviour
         get { return type; }
     }
 
-    // Use this for initialization
+    /// <summary>
+    /// Use this for initialization
+    /// </summary>
     void Start()
     {
-        //health = 1000;
+        health = 10;
         active = true;
         type = gameObject.tag;     // Question voodoo. . .?
                                    // Answer More voodoo. this not needed. gameObject is this. O.o
                                    // ^ Cool rap
+                                   // YO
 		plusButton = myPlusButton.GetComponent<PlusButton>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     /// <summary>
@@ -55,6 +62,7 @@ public class Converter : MonoBehaviour
         {
             health = 0;
             active = false;
+            gameObject.GetComponent<Renderer>().sharedMaterial = materials[1];
         }
         else
         {
@@ -69,9 +77,10 @@ public class Converter : MonoBehaviour
     /// <param name="regen">Integer value > 0 of how much to repair by</param>
     public void onRepair(int regen)
     {
-        if (health == 0 && regen > 0)
+        if (health < 1 && regen > 0)
         {
             active = true;
+            gameObject.GetComponent<Renderer>().sharedMaterial = materials[0];
         }
 
         health += regen;
@@ -81,15 +90,21 @@ public class Converter : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Enable button for conversion
+    /// </summary>
 	public void ActivateConversion()
 	{
 		plusButton.Activate ();
 	}
 
+    /// <summary>
+    /// Disable button for conversion
+    /// </summary>
 	public void DeactivateConversion()
 	{
 		plusButton.DeActivate ();
 	}
 
 
-}
+}//end of Convertor
