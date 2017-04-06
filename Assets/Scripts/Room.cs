@@ -85,7 +85,7 @@ public class Room : MonoBehaviour
 
                     if (spawn != null)
                     {
-                        spawn.adjustSpawnChance(1);
+                        spawn.adjustSpawnChance(1.5f);
                     }
 
                     if (generator != null)
