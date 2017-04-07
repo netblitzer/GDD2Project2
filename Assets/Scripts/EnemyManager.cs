@@ -20,9 +20,6 @@ public class EnemyManager : MonoBehaviour {
     [Tooltip("An adjustable value for the chance (out of 10000 frames) for enemies to spawn into the map.")]
     public float enemySpawnChance = 10f;
 
-    [Tooltip("An adjustable value for the amount that the spawn weight will spread.")]
-    public float weightSpread = 0.01f;
-
     // variables for the enemy stats
     [Tooltip("The max health of the enemy.")]
     public int maxHealth = 10;
