@@ -15,9 +15,9 @@ public class EnemyManager : MonoBehaviour {
     [Tooltip("A multiplier to make things more or less difficult through the game")]
     public float difficulty = 1f;
     
-    [Tooltip("An adjustable value for the chance (out of 10000) for enemies to split where they are.")]
+    [Tooltip("An adjustable value for the chance (out of 10000 frames) for enemies to split where they are.")]
     public float enemySplitChance = 1f;
-    [Tooltip("An adjustable value for the chance (out of 10000) for enemies to spawn into the map.")]
+    [Tooltip("An adjustable value for the chance (out of 10000 frames) for enemies to spawn into the map.")]
     public float enemySpawnChance = 10f;
 
     [Tooltip("An adjustable value for the amount that the spawn weight will spread.")]

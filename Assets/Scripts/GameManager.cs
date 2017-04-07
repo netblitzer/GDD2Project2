@@ -41,6 +41,17 @@ public class GameManager : MonoBehaviour
     public List<GameObject> generators;
     public Player player;
 
+
+    //Properties for Test
+    public float health;
+    public float speed;
+    public float shotSpeed;
+    public int generatorHealth;
+    public int convertorHealth;
+    public float playerRegen;
+    public int playerRepairRate;
+    public int enemyDamageRate;
+
     /// <summary>
     /// Use this for initialization
     /// </summary>

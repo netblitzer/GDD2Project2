@@ -12,6 +12,8 @@ public class Converter : MonoBehaviour
     [SerializeField]
     private int health = 1000;
 
+    private int maxHealth = 1000;
+
     [SerializeField]
     private bool active;
 
@@ -20,6 +22,7 @@ public class Converter : MonoBehaviour
 
 	private PlusButton plusButton; // script for my plus button
 
+    private GameManager gm;
 
     //Properties
     //---------------------------------------------------------
@@ -43,6 +46,8 @@ public class Converter : MonoBehaviour
     /// </summary>
     void Start()
     {
+        gm = FindObjectOfType<GameManager>();
+
         health = 1000;
         active = true;
         type = gameObject.tag;     // Question voodoo. . .?
@@ -50,6 +55,8 @@ public class Converter : MonoBehaviour
                                    // ^ Cool rap
                                    // YO
 		plusButton = myPlusButton.GetComponent<PlusButton>();
+        maxHealth = gm.convertorHealth;
+        health = maxHealth;
     }
 
     /// <summary>
@@ -84,9 +91,9 @@ public class Converter : MonoBehaviour
         }
 
         health += regen;
-        if (health > 1000)
+        if (health > maxHealth)
         {
-            health = 1000;
+            health = maxHealth;
         }
     }
 

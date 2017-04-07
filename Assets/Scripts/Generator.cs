@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Generator : MonoBehaviour
 {
+    private GameManager gm;
 
     [SerializeField]
     private int health;
+
+    private int maxHealth;
 
     [SerializeField]
     private bool powering;
@@ -27,18 +30,23 @@ public class Generator : MonoBehaviour
     }
 
 
-    // Use this for initialization
+    /// <summary>
+    /// Use this for initialization
+    /// </summary>
     void Start()
     {
         health = 1000;
         powering = true;
+        gm = FindObjectOfType<GameManager>();
+        maxHealth = gm.generatorHealth;
+        health = maxHealth;
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
     void Update()
-    {
-
-    }
+    {}
 
     /// <summary>
     /// Handles damage processing for generators
@@ -72,9 +80,9 @@ public class Generator : MonoBehaviour
         }
 
         health += regen;
-        if (health > 100)
+        if (health > maxHealth)
         {
-            health = 100;
+            health = maxHealth;
         }
     }//end of Repair
 

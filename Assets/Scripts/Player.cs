@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float health;
-
-    public float maxSpeed;
-
-    public GameObject bulletPrefab;
+    private GameManager gm;
 
     private bool debug;
     private bool freeze;
@@ -19,15 +15,21 @@ public class Player : MonoBehaviour
     private Vector3 currMousePosition;
 
     private float shootFreezeTime;
-
-    [SerializeField]
-    private float shootTime;
+    private float regenMod;
 
     private DebugLines lines;
 
     private int energy;         // Available energy
     private int[] allocation;   // 0 == Square, 1 == Circle, 2 == Triangle
 
+    [SerializeField]
+    private float shootTime;
+
+    public float health;
+
+    public float maxSpeed;
+
+    public GameObject bulletPrefab;
 
     //Properties
     public float ShootTime
@@ -66,14 +68,19 @@ public class Player : MonoBehaviour
     //internal reference to the CharacterController component
     protected CharacterController charControl;
 
-    // Use this for initialization
+    /// <summary>
+    /// Use this for initialization
+    /// </summary>
     void Start()
     {
+        gm = FindObjectOfType<GameManager>();
+
         allocation = new int[3];
 
         health = 100.0f;
         speed = 0f;
         shootFreezeTime = 0f;
+        regenMod = 1.0f;
         velocity = Vector3.zero;
         prevMousePosition = Input.mousePosition;
         currMousePosition = Input.mousePosition;
@@ -87,9 +94,19 @@ public class Player : MonoBehaviour
         freeze = false;
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
     void Update()
     {
+        //Update values from game mangager for testing
+        //-------------------------------------------------------------------------------------------
+        shootTime = gm.shotSpeed;
+        health = gm.health;
+        speed = gm.speed;
+        regenMod = gm.playerRegen;
+        //-------------------------------------------------------------------------------------------
+
         if (gameObject.transform.position.y > 0.5f)
         {
             //Debug.Log(gameObject.transform.position.y);
@@ -189,19 +206,26 @@ public class Player : MonoBehaviour
         }
 
         // lastly regen health over time
-        health = validateHealth(health += Time.deltaTime);
+        health = validateHealth(health += (Time.deltaTime * regenMod));
 
 
         //Debug.Log("Update: " + allocation[0]);
     }//end of Update
 
-    // validate health value, keep between 0 and 100 (like, duh)
+    /// <summary>
+    /// Validate health value, keep between 0 and 100 (like, duh)
+    /// </summary>
+    /// <param name="value">Current health</param>
+    /// <returns>Real health</returns>
     private float validateHealth(float value)
     {
         return value >= 0 && value <= 100 ? value : value < 0 ? 0 : 100;
     }
 
-    //Take damage from enemy
+    /// <summary>
+    /// Take damage from enemy
+    /// </summary>
+    /// <param name="dmg">Damage amount player takes</param>
     public void TakeDamage(float dmg)
     {
         if (dmg > 0.0f && dmg < 10.0f)
@@ -210,8 +234,11 @@ public class Player : MonoBehaviour
         }
     }
 
-    // Could refactor into RemoveEnergy & AddEnergy
-
+    /// <summary>
+    /// Update the available energy player has
+    /// </summary>
+    /// <param name="_energy">Current amount of energy available</param>
+    /// <returns>Returns false if energy amount is invalid</returns>
     public bool SetPlayerEnergy(int _energy)
     {
         if (_energy < 0)
@@ -250,10 +277,12 @@ public class Player : MonoBehaviour
         return true;
     }
 
-    // For when player removes energy
+    /// <summary>
+    /// For when player removes energy
+    /// </summary>
+    /// <param name="index">Energy tpye to subtract from</param>
     public void SubStrength(int index)
     {
-        //Debug.Log("Before: " + allocation[0] + "  " + allocation[1] + "  " + allocation[2] + "  " + index);
         if (index >= 0 && index < allocation.Length)
             if (allocation[index] > 0)
             {
@@ -261,14 +290,14 @@ public class Player : MonoBehaviour
                 allocation[index]--;
                 energy++;
             }
-
-        //Debug.Log("After: " + allocation[0] + "  " + allocation[1] + "  " + allocation[2]);
     }
 
-    // For when player adds energy
+    /// <summary>
+    /// For when player adds energy
+    /// </summary>
+    /// <param name="index">Energy type to add to</param>
     public void AddStrength(int index)
     {
-       
         if (index >= 0 && index < allocation.Length)
         {
             if (energy > 0)
@@ -279,7 +308,9 @@ public class Player : MonoBehaviour
         }
     }
 
-    // create a bullet yo!
+    /// <summary>
+    /// create a bullet yo!
+    /// </summary>
     private void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab) as GameObject;
