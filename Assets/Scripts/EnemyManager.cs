@@ -161,7 +161,7 @@ public class EnemyManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        int[] types = new int[3];
+        int[] types = { 10, 10, 10 };
         int chance;
 
         List<Enemy> enemiesToRemove = new List<Enemy>();
@@ -290,6 +290,65 @@ public class EnemyManager : MonoBehaviour {
                 }
             }
         }
+
+        chance = Random.Range(0, 10000);
+
+        if (enemySpawnChance * difficulty > chance)
+        {
+            // spawn a new enemy somewhere based on total weights
+
+            // random weight to spawn into
+            float spawnWeight = Random.Range(0, totalWeight);
+            float checkedWeight = 0f;
+            // find which room the spawn is in
+            for (int j = 0; j < keys.Count; j++)
+            {
+                // check if it's this room
+                if (spawnWeight > checkedWeight && spawnWeight <= (checkedWeight + spawns[keys[j]].spawnWeight))
+                {
+
+                    if (spawns[keys[j]].containsPlayer)
+                    {
+                        j = 0;
+                        checkedWeight = 0f;
+                        chance = Random.Range(0, 10000);
+                    }
+
+                    // spawn an enemy
+                    GameObject newEnemy;
+                    EnemyTypes type = (EnemyTypes)Random.Range(0, 3);
+
+                    switch (type)
+                    {
+                        default:
+                        case EnemyTypes.square:
+                            newEnemy = GameObject.Instantiate<GameObject>(enemySquarePrefab);
+                            break;
+                        case EnemyTypes.circle:
+                            newEnemy = GameObject.Instantiate<GameObject>(enemyCirclePrefab);
+                            break;
+                        case EnemyTypes.triangle:
+                            newEnemy = GameObject.Instantiate<GameObject>(enemyTrianglePrefab);
+                            break;
+                    }
+
+                    // initialize the enemy
+                    Enemy eScript = newEnemy.GetComponent<Enemy>();
+                    Vector3 spawnLoc = (spawns[keys[j]].gameObject.transform.position - new Vector3(Random.Range(-7f, 7f), 10.5f, Random.Range(-4f, 4f)));
+                    eScript.init(maxHealth, maxSpeed, maxForce, maxDamage, type, spawnLoc, null);
+                    enemyCount++;
+                    eScript.name = "Enemy Number " + enemyCount.ToString();
+
+                    enemies.Add(eScript);
+                    break;
+                }
+                else
+                {
+                    checkedWeight += spawns[keys[j]].spawnWeight;
+                }
+            }
+        }
+
 
         foreach (Enemy e in enemiesToRemove) {
             enemies.Remove(e);

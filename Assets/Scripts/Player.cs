@@ -92,6 +92,8 @@ public class Player : MonoBehaviour
         allocation[2] = 3;
 
         freeze = false;
+
+        health = gm.health;
     }
 
     /// <summary>
@@ -102,7 +104,6 @@ public class Player : MonoBehaviour
         //Update values from game mangager for testing
         //-------------------------------------------------------------------------------------------
         shootTime = gm.shotSpeed;
-        health = gm.health;
         speed = gm.speed;
         regenMod = gm.playerRegen;
         //-------------------------------------------------------------------------------------------
@@ -286,7 +287,6 @@ public class Player : MonoBehaviour
         if (index >= 0 && index < allocation.Length)
             if (allocation[index] > 0)
             {
-                Debug.Log(index);
                 allocation[index]--;
                 energy++;
             }

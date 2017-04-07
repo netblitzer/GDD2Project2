@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum EnemyTypes { triangle, square, circle };
+public enum EnemyTypes { square, circle, triangle };
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour {
@@ -65,6 +65,7 @@ public class Enemy : MonoBehaviour {
     public void init(int _maxH, int _maxS, int _maxF, float _damage, EnemyTypes _type, Vector3 _startPos, GameObject _target) {
         gm = GameObject.FindObjectOfType<GameManager>();
 
+        type = _type;
         maxHealth = _maxH;
         maxSpeed = _maxS;
         maxForce = _maxF;
